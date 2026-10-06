@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bostgame | Game Player</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;background:#000}
+body{
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif;
+  overflow-x:hidden;
+}
+.app{
+  width:min(1200px,94%);
+  margin:auto;
+  padding:22px 0 35px;
+}
+.topbar{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:18px;
+}
+.brand{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+.back{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 17px;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:650;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  transition:.2s;
+}
+.back:hover{background:rgba(255,255,255,.13);transform:translateY(-1px)}
+.player{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:30px;
+  padding:10px;
+  background:rgba(255,255,255,.045);
+  box-shadow:0 25px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+.screen{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  min-height:360px;
+  overflow:hidden;
+  border-radius:22px;
+  background:#050505;
+  border:1px solid rgba(255,255,255,.08);
+}
+#gameFrame{
+  width:100%;
+  height:100%;
+  min-height:360px;
+  border:0;
+  display:block;
+  background:#000;
+}
+.empty{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  background:#050505;
+  text-align:center;
+  padding:25px;
+}
+.empty .symbol{
+  width:76px;height:76px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  font-size:30px;
+}
+.empty h1{font-size:22px}
+.empty p{color:#8e8e93;font-size:14px}
+.info{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-top:16px;
+  padding:17px 19px;
+  border-radius:22px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.09);
+}
+.title{
+  font-size:22px;
+  font-weight:750;
+}
+.hint{
+  margin-top:5px;
+  color:#8e8e93;
+  font-size:13px;
+}
+.fullscreen{
+  border:0;
+  color:#fff;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:15px;
+  padding:11px 15px;
+  font-weight:650;
+  cursor:pointer;
+  transition:.2s;
+}
+.fullscreen:hover{background:rgba(255,255,255,.15)}
+@media(max-width:650px){
+  .app{width:96%;padding-top:12px}
+  .topbar{height:58px}
+  .brand{font-size:21px}
+  .screen,#gameFrame{min-height:240px}
+  .info{align-items:flex-start}
+  .title{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">BOSTGAME</div>
+    <a class="back" href="index.html">‹&nbsp; Games</a>
+  </header>
+
+  <main class="player">
+    <section class="screen">
+      <iframe id="gameFrame" title="Bostgame Player" allow="fullscreen; autoplay"></iframe>
+      <div class="empty" id="empty">
+        <div class="symbol">🎮</div>
+        <h1>Select a game</h1>
+        <p>Open this page with a game file to start playing.</p>
+      </div>
+    </section>
+
+    <section class="info">
+      <div>
+        <div class="title" id="gameTitle">Bostgame Player</div>
+        <div class="hint">Fullscreen player • iOS-style glass interface</div>
+      </div>
+      <button class="fullscreen" id="fullscreenBtn">Fullscreen</button>
+    </section>
+  </main>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const game = params.get("game");
+const frame = document.getElementById("gameFrame");
+const empty = document.getElementById("empty");
+const title = document.getElementById("gameTitle");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+const games = {
+  runner: ["Bost Runner","runner.html"],
+  racing: ["Neon Racing","racing.html"],
+  shooter: ["Target Rush","shooter.html"]
+};
+
+if(game && games[game]){
+  title.textContent = games[game][0];
+  frame.src = games[game][1];
+  empty.style.display = "none";
+}
+
+fullscreenBtn.addEventListener("click",()=>{
+  const target = document.querySelector(".screen");
+  if(!document.fullscreenElement){
+    target.requestFullscreen?.();
+  }else{
+    document.exitFullscreen?.();
+  }
+});
+</script>
+</body>
+</html>
